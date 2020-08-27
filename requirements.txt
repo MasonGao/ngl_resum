@@ -1,2 +1,3 @@
 numpy
 pylhe
+ngl_resum
