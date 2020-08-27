@@ -1,7 +1,7 @@
 dependencies:
   - python
-  - numpy
   - pip
   - time
   - pip:
+    - numpy
     - -i https://test.pypi.org/simple/ ngl_resum
