@@ -4,7 +4,8 @@
 #                                                                      #
 # Resums the non-global logarithms, needs ngl_resum.py                 #
 #                                                                      #
-# If using ngl_resum, please cite doi:10.1007/JHEP09(2020)029          #
+# If using ngl_resum, please cite                                      #
+#               doi:10.1007/JHEP09(2020)029                            #
 #               https://inspirehep.net/literature/1798660              #
 #                                                                      #
 ########################################################################

@@ -9,7 +9,7 @@ If you use this code, please cite [doi:10.1007/JHEP09(2020)029](https://inspireh
 We suggest using the following notebooks in Binder:
 
 The package ngl\_resum:
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/MarcelBalsiger/ngl_resum/master?filepath=%2Fdocs%2nglresum.ipynb) 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/MarcelBalsiger/ngl_resum/master?filepath=%2Fdocs%2Fnglresum.ipynb) 
 
 Example of the resummation of non-global logarithms of a rapidity gap, starting from a single color dipole:
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/MarcelBalsiger/ngl_resum/master?filepath=%2Fdocs%2Fresummator_dipole.ipynb) 

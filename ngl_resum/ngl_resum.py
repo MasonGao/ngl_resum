@@ -4,6 +4,10 @@
 #                                                                      #
 # Backbone of the Resummation of non-global logarithms                 #
 #                                                                      #
+# If using ngl_resum, please cite                                      #
+#               doi:10.1007/JHEP09(2020)029                            #
+#               https://inspirehep.net/literature/1798660              #
+#                                                                      #
 ########################################################################
 
 __author__ = 'Marcel Balsiger'
