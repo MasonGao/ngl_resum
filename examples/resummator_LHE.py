@@ -4,6 +4,9 @@
 #                                                                      #
 # Resums the non-global logarithms, needs ngl_resum.py                 #
 #                                                                      #
+# If using ngl_resum, please cite doi:10.1007/JHEP09(2020)029          #
+#               https://inspirehep.net/literature/1798660              #
+#                                                                      #
 ########################################################################
 
 __author__ = 'Marcel Balsiger'
@@ -63,14 +66,15 @@ def _outside(self,v):
            (v.R2(jetaxis2)>jetRadius**2) and \
            (abs(v.rap)<rapRangeMax) and (abs(v.rap)>=rapRangeMin)
 
-def validEvent(ev):
+def validEvent(ev): # ev is the ngl.Event we want to test
+    
+    # check whether we have the necessary particles
     if ev.intermediateTop == None : return False
     if ev.outgoingBottom == None : return False
-    if (ev.outgoingElectron == None) and (ev.outgoingMuon == None): 
-        return False
-    if len(ev.intermediateTop) != 2:  return False
-    if len(ev.outgoingBottom) != 2: return False
-
+    if (ev.outgoingElectron == None) and (ev.outgoingMuon == None): \
+            return False
+    if len(ev.intermediateTop) != 2 :  return False
+    if len(ev.outgoingBottom) != 2 : return False
 
     momentaLeptonsOut=[]
     momentaNeutrinoOut=[]
@@ -79,6 +83,7 @@ def validEvent(ev):
     if not ev.outgoingElectron==None:
         for i in ev.outgoingElectron:
             momentaLeptonsOut.append(i)
+            # checks on electron(s)
             if i.eT< 25: return False
             if abs(i.rap)>2.47: return False
         for i in ev.outgoingENeutrino:
@@ -90,6 +95,7 @@ def validEvent(ev):
     if not ev.outgoingMuon==None:
         for i in ev.outgoingMuon:
             momentaLeptonsOut.append(i)
+            # checks on muon(s)
             if i.pT< 20: return False
             if abs(i.rap)>2.5: return False
         for i in ev.outgoingMNeutrino:
@@ -97,35 +103,32 @@ def validEvent(ev):
     else:
         electronmuonevent=False
     
-        
-    dileptonmass=np.sqrt((momentaLeptonsOut[0]+momentaLeptonsOut[1])*\
-            (momentaLeptonsOut[0]+momentaLeptonsOut[1]))
-    missingMomentum=(momentaNeutrinoOut[0]+momentaNeutrinoOut[1])
+    # check number of leptons ans neutrinos
+    if len(momentaLeptonsOut) != 2 : return False
+    if len(momentaNeutrinoOut) != 2 : return False
     
-    HT=momentaLeptonsOut
-           
+    dileptonmass=np.sqrt((momentaLeptonsOut[0]+momentaLeptonsOut[1])*\
+                            (momentaLeptonsOut[0]+momentaLeptonsOut[1]))
+    missingMomentum=(momentaNeutrinoOut[0]+momentaNeutrinoOut[1])
+        
     if not electronmuonevent:
-        if missingMomentum.eT<40: return False
-        if (dileptonmass<15 or abs(dileptonmass-91)<10):return False
-    # HT-cut
+        # checks on "missing momenta" (neutrinos) and dilepton mass
+        if missingMomentum.eT<40 : return False
+        if (dileptonmass<15 or abs(dileptonmass-91)<10) : return False
     else:
+        # check on visible transverse momentum
         if (momentaLeptonsOut[0].pT+momentaLeptonsOut[1].pT+\
             ev.outgoingBottom[0].pT+ev.outgoingBottom[1].pT)<130:
                 return False
 
-    # Check on bottom quarks
+    # checks on bottom quarks
     for i in ev.outgoingBottom:
         if i.pT<25: return False
         if abs(i.rap)>2.4: return False
         for j in momentaLeptonsOut:
                     if i.R2(j)<0.4**2: return False
 
-    if (abs(ev.outgoingBottom[0].rap)>2.4 or \
-        abs(ev.outgoingBottom[1].rap)>2.4 or \
-        ev.outgoingBottom[0].pT<25 or ev.outgoingBottom[1].pT<25):
-        return False
-        
-    return True
+    return True # only gets reached, if no check failed.
     
 
 
@@ -141,7 +144,6 @@ fullNGL2LoopSq=0.
 numberEvents=0
 numberValidEvents=0
 
-
 timeStart = time.time()
 
 for event in evtFile:
@@ -150,7 +152,7 @@ for event in evtFile:
     
     ev=ngl.Event(eventFromFile=event,productionDipoles='intermediate',\
                     decayDipoles=False)
-    print(ev)
+
     if validEvent(ev):
         numberValidEvents+=1
         
@@ -168,7 +170,7 @@ for event in evtFile:
     if numberEvents >= int(args['break']):break
     
 print('runtime=', time.time()-timeStart,' sec')    
-print("of ", numberEvents," events, I showered ",numberValidEvents)
+print("of ", numberEvents," events, ", numberValidEvents," were valid.")
 
 print('*************************************')
 print('*  t       LL(t)          dS(t)     * ')
@@ -179,7 +181,7 @@ print('*** Binned Result ***\n\n')
 for i in range(0,fullResultLL.nbins):    
     print( round(fullResultLL.centerBinValue[i],4),' ', \
                 fullResultLL.entries[i]/numberValidEvents,' ', \
-                np.sqrt(fullResultLL.errorEntries[i])/numberValidEvents)
+                np.sqrt(fullResultLL.squaredError[i])/numberValidEvents)
 
 print('\n\n'  )  
 snlo=fullNGL1Loop/numberValidEvents
@@ -201,5 +203,3 @@ snnloError=abs(np.sqrt((fullNGL2LoopSq/numberValidEvents-\
 print('snnlo=',snnlo)
 print('snnloError=',snnloError)
 print('\n')
-print('\n')
-

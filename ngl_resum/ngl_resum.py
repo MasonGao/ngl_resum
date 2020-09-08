@@ -25,7 +25,7 @@ Nc=3
 cutMassive=1e-7
 
 # assume p to have infinite rapidity, if (1-|cos(theta)|)> cutInfRap
-cutInfRap=1e-10
+cutInfRap=1e-8
 
 # do not boost p to q, if (p-q)*(p-q)<cutBoost 
 cutBoost=1e-10
@@ -1093,7 +1093,7 @@ class Hist:
             s+="--------|----------\n"
             for i in range(0,self.nbins):
                 s +=" " + "{:6.4f}".format(self.centerBinValue[i])\
-                        +" | "+"{:10.4f}".format(self.entries[i])+"\n"
+                        +" | "+"{:8.6f}".format(self.entries[i])+"\n"
         return s
     
     def __add__(self,other):
@@ -1201,6 +1201,23 @@ class Hist:
             r.entries[i]=self.entries[i]*other
                 
         return r
+        
+    def __truediv__(self,other):
+        """
+        Dividing Hist by a scalar.
+        
+        Returns
+        -------
+        Hist 
+            hist with entries of self divided by other, error unchanged
+        """
+        
+        r=Hist(self.nbins,self.tmax,self.errorHistCalc)
+        
+        for i in range(0,r.nbins):
+            r.entries[i]=self.entries[i]/other
+                
+        return r    
       
     def addToBin(self,t,w): 
         """
