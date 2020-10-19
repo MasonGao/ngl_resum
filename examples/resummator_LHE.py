@@ -12,7 +12,7 @@
 
 __author__ = 'Marcel Balsiger'
 __email__ = 'marcel.balsiger@hotmail.com'
-__date__ = 'August 1, 2020'
+__date__ = 'October 19, 2020'
 
 import time
 import numpy as np
@@ -142,6 +142,8 @@ fullNGL1LoopSq=0.
 fullNGL2Loop=0.
 fullNGL2LoopSq=0.
 
+eventWeight=0.
+
 numberEvents=0
 numberValidEvents=0
 
@@ -153,6 +155,11 @@ for event in evtFile:
     
     ev=ngl.Event(eventFromFile=event,productionDipoles='intermediate',\
                     decayDipoles=False)
+    
+    if not eventWeight > 0:
+        eventWeight=ev.weight
+    if not eventWeight==ev.weight:
+        print("Warning: events not of equal weight!")
 
     if validEvent(ev):
         numberValidEvents+=1
@@ -172,6 +179,8 @@ for event in evtFile:
     
 print('runtime=', time.time()-timeStart,' sec')    
 print("of ", numberEvents," events, ", numberValidEvents," were valid.")
+print("Weight of each event:", eventWeight)
+print('\n\n'  )
 
 print('*************************************')
 print('*  t       LL(t)          dS(t)     * ')
@@ -184,7 +193,7 @@ for i in range(0,fullResultLL.nbins):
                 fullResultLL.entries[i]/numberValidEvents,' ', \
                 np.sqrt(fullResultLL.squaredError[i])/numberValidEvents)
 
-print('\n\n'  )  
+print('\n'  )  
 snlo=fullNGL1Loop/numberValidEvents
 snloError=np.sqrt((fullNGL1LoopSq/numberValidEvents-\
                         (fullNGL1Loop/numberValidEvents)**2)\

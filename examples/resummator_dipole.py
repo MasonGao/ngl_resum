@@ -12,7 +12,7 @@
 
 __author__ = 'Marcel Balsiger'
 __email__ = 'marcel.balsiger@hotmail.com'
-__date__ = 'August 1, 2020'
+__date__ = 'October 19, 2020'
 
 import time
 import numpy as np

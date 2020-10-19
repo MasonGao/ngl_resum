@@ -12,7 +12,7 @@
 
 __author__ = 'Marcel Balsiger'
 __email__ = 'marcel.balsiger@hotmail.com'
-__date__ = 'August 1, 2020'
+__date__ = 'October 19, 2020'
 
 import numpy as np
 import math
@@ -550,6 +550,9 @@ class Event:
         color dipoles associated to decay of produced particles - not 
         available if Event gets created by feeding Dipole or 
         disabled decayDipoles
+    weight : float
+        weight of the Event - not available if Event gets created by 
+        feeding Dipole
     incomingDown : [FourVector, ...]
         list of all incoming down quarks and down antiquarks 
         - not availabe if Event created by feeding dipole 
@@ -786,7 +789,7 @@ class Event:
             outgoing=[None]*26
             toColorSortProd=[]
             if decayDipoles: toColorSortDec=[]
-            
+            self.weight=eventFromFile.eventinfo.weight
             
             for p in eventFromFile.particles:
                 stat=int(p.status)
